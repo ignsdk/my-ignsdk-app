@@ -1,0 +1,5 @@
+app.spec /opt/ignsdk/info-distro.ign/
+ignsdk.json /opt/ignsdk/info-distro.ign/
+index.html /opt/ignsdk/info-distro.ign/
+icons/ /opt/ignsdk/info-distro.ign/
+menu/ignsdk-info-distro.desktop /usr/share/applications/

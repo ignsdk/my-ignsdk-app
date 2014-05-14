@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="asset/themes/base/jquery.ui.all.css">
+		<script type="text/javascript" src="qrc:///js/jquery.js"></script>
+		<script type="text/javascript" src="qrc:///js/ign.js"></script>
+		<script src="asset/ui/jquery.ui.core.js"></script>
+		<script src="asset/ui/jquery.ui.widget.js"></script>
+		<script src="asset/ui/jquery.ui.mouse.js"></script>
+		<script src="asset/ui/jquery.ui.slider.js"></script>
+		<script>
+		$(document).ready(function() {
+			var sys = ign.sys();
+			
+			$( "#slider-humidity" ).slider({
+				orientation: "horizontal",
+				range: "min",
+				min: 0,
+				max: 70,
+				value: 60,
+				slide: function( event, ui ) {
+					$( "#humid-amount" ).val( ui.value );
+                    $('#fuzzy-result').html("<br/><br/><h2>"+ sys.cliOut('python script/penyiram-fuzzy.py '+$( "#slider-humidity" ).slider( "value" )+' '+  $( "#slider-temperature" ).slider( "value" )) +"</h2>");
+				}
+			});
+			$( "#humid-amount" ).val( $( "#slider-humidity" ).slider( "value" ) );
+			
+			$( "#slider-temperature" ).slider({
+				orientation: "horizontal",
+				range: "min",
+				min: 0,
+				max: 50,
+				value: 35,
+				slide: function( event, ui ) {
+					$( "#temperature-amount" ).val( ui.value );
+                    $('#fuzzy-result').html("<br/><br/><h2>"+ sys.cliOut('python script/penyiram-fuzzy.py '+$( "#slider-humidity" ).slider( "value" )+' '+  $( "#slider-temperature" ).slider( "value" )) +"</h2>");
+				}
+			});
+			$( "#temperature-amount" ).val( $( "#slider-temperature" ).slider( "value" ) );
+			$('#fuzzy-result').html("<br/><br/><h2>"+ sys.cliOut('python script/penyiram-fuzzy.py '+$( "#slider-humidity" ).slider( "value" )+' '+  $( "#slider-temperature" ).slider( "value" )) +"</h2>");
+		});
+		</script>
+	</head>
+	<body>
+		<p>
+			<label for="humid-amount">Humidity:</label>
+			<input type="text" id="humid-amount" style="border:0; color:#f6931f; font-weight:bold;" />
+		</p>
+		<div id="slider-humidity" style="height:10px;"></div>
+		<p>
+			<label for="temperature-amount">Temperature:</label>
+			<input type="text" id="temperature-amount" style="border:0; color:#f6931f; font-weight:bold;" />
+		</p>
+		<div id="slider-temperature" style="height:10px;"></div>
+		<div id="fuzzy-result">
+		</div>
+	</body>
+</html>

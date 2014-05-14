@@ -1,0 +1,15 @@
+Source: ignsdk-todo
+Section: unknown
+Priority: optional
+Maintainer: nyankod <mail@nyankod.com>
+Build-Depends: ignsdk-debian | ignsdk, debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+#Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/ignsdk-todo.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/ignsdk-todo.git;a=summary
+
+Package: ignsdk-todo
+Architecture: all
+Depends: ignsdk-debian | ignsdk, ${shlibs:Depends}, ${misc:Depends}
+Description: Another IGN SDK Application
+ This is an IGN SDK Application

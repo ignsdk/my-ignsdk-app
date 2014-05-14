@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="asset/themes/base/jquery.ui.all.css">
+		<script type="text/javascript" src="qrc:///js/jquery.js"></script>
+		<script type="text/javascript" src="qrc:///js/ign.js"></script>
+        <script src="asset/ui/jquery.ui.core.js"></script>
+		<script src="asset/ui/jquery.ui.widget.js"></script>
+		<script src="asset/ui/jquery.ui.mouse.js"></script>
+		<script src="asset/ui/jquery.ui.slider.js"></script>
+		<script src="asset/ui/jquery.ui.datepicker.js"></script>
+		<script>
+            // menggunakan System dan Database API IGNSDK
+            var sys = ign.sys();
+            var sql = ign.sql();
+            var driver = sql.driver("sqlite", "ignsdk_todo.db");
+            
+            $(document).ready(function() {
+                show_all_task();
+                
+                $('#browse-data-button').click(function(){
+                    show_all_task();
+                });
+                
+                $('#new-task-button').click(function(){
+                    $('#display-area').hide();
+                    var form_add = 'views/form-add.html';
+                    $('#display-area').load(form_add).fadeIn('slow');
+                });
+                
+                $('#about-button').click(function(){
+                    $('#display-area').hide();
+                    var about = '<h1>Created by Nyankod ;(), copyright 2014.</h1>';
+                    $('#display-area').fadeIn('slow').html(about);
+                });
+                
+                // fungsi untuk menampilkan semua task
+                function show_all_task(){
+                    var query = sql.query("select * from task");
+                    console.log(query.status);
+                    console.log(query.content);
+                    var result ="";
+                    for (var obj in query.content){
+                        console.log(query.content[obj]);
+                        console.log(query.content[obj].name);
+                        result += query.content[obj].name + ", " + query.content[obj].priority + ", " + query.content[obj].date_reminder 
+                                    +" | <a onclick='updateTask(this);' id='delete-button-"+query.content[obj].id+"' data-id='"+query.content[obj].id+"' href='javascript:void(0)'>Edit</a>"
+                                    +" | <a onclick='deleteTask(this);' id='delete-button-"+query.content[obj].id+"' data-id='"+query.content[obj].id+"' href='javascript:void(0)'>Delete</a><br />";
+                    }
+                    $('#display-area').html(result).fadeIn('slow');
+                };
+                
+            });
+            
+            function updateTask(task){
+                var id = $(task).attr('data-id');
+                alert('task yang akan diupdate adalah : ' + id);
+            }
+            
+            function deleteTask (task){
+                var id = $(task).attr('data-id');
+                
+                if (confirm('Are you sure to delete this task ?')){
+                    var query = sql.query("delete from task where id="+id);
+                    console.log(query.status);
+                    console.log(query.content);
+                }
+            }
+        
+		</script>
+	</head>
+	<body>
+        <div id="menu-bar">
+            <ul style="list-style-type:none; margin:10px 20px 20px 20px ; padding:20px;">
+                <li style="display: inline;"><a id="browse-data-button" href="javascript:void(0)">Browse Data</a></li>
+                <li style="display: inline;"><a id="new-task-button" href="javascript:void(0)">New Task</a></li>
+                <li style="display: inline;"><a id="about-button" href="javascript:void(0)">About</a></li>
+            </ul>
+        </div>
+        
+        <div id="display-area">
+            
+        </div>
+	</body>
+</html>

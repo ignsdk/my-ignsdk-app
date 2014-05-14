@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Pengatur Suara
+Exec=/usr/bin/ignsdk -p /opt/ignsdk/pengatur-suara.ign
+Icon=/opt/ignsdk/pengatur-suara.ign/icons/app.png
+Terminal=false
+Type=Application
+Categories=Audio;AudioVideo

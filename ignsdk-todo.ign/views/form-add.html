@@ -1,0 +1,55 @@
+<script type="text/javascript">
+    
+    // membuat slider untuk prioritas setiap task
+    $( "#priority-slider" ).slider({
+        orientation: "horizontal",
+        range: "min",
+        min: 0,
+        max: 3,
+        value: 2,
+        slide: function( event, ui ) {
+            $( "#priority-rates" ).val( ui.value );
+        }
+    });
+    $( "#priority-rates" ).val( $( "#priority-slider" ).slider( "value" ) );
+    
+    // membuat datepicker untuk menentukan date_reminder
+    $( "#date-reminder" ).datepicker({dateFormat: 'yy-mm-dd'});
+    
+    // proses penambahan task dilakukan ketika form-add-task di submit
+    $("#form-add-task").submit(function(){
+        var sql = ign.sql();
+        var driver = sql.driver("sqlite", "ignsdk_todo.db");
+        
+        var task_name = $('#task-name').val();
+        var priority_rates = $('#priority-rates').val();
+        var date_reminder = $('#date-reminder').val();
+        
+        var query = sql.query("insert into task values (null, '"+task_name+"', "+priority_rates+", '"+date_reminder+"')");
+        console.log("query ketika submit form : "+ query.status);
+        console.log("isi query ketika submit form : " + query.content);
+    
+        return false;
+    });
+    
+</script>
+<form id="form-add-task">
+    <fieldset>
+        <p>
+            <label for="task-name">Task Name:</label>
+            <input type="text" id="task-name" name="task-name" size="90"/>
+        </p>
+        <p>
+            <label for="priority-rates">Priority:</label>
+            <input type="text" id="priority-rates" name="priority-rates" style="border:0; color:#f6931f; font-weight:bold;" />
+        </p>
+        <div id="priority-slider" style="height:10px;"></div>
+        <p>
+            <label for="date-reminder">Date Reminder:</label>
+            <input type="text" id="date-reminder" name="date-reminder" size="30" />
+        </p>
+        <p>
+            <input type="submit" value="Save It" />
+        </p>
+    </fieldset>
+</form>

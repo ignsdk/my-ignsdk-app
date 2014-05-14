@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="qrc:///js/jquery.js"></script>
+<script type="text/javascript" src="qrc:///js/ign.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var sys = ign.sys();
+		document.getElementById('#info-distro').innerHTML = '<h1>'+  sys.cliOut('uname -a') +'</h1>';
+		
+		$('#sys-info').click(function(){
+			document.getElementById('#info-distro').innerHTML = '<h1>'+  sys.cliOut('uname -a') +'</h1>';
+			$('div#info-distro').fadeIn();
+		});
+		
+		$('#sys-dir').click(function(){
+			document.getElementById('#info-distro').innerHTML = '<pre>'+  sys.cliOut('ls /') +'</pre>';
+			$('div#info-distro').fadeIn();
+		});
+	});
+</script>
+</head>
+<body>
+	<a id="sys-info" href="#">System Information</a>
+	<a id="sys-dir" href="#">System Directory</a>
+	<div id="#info-distro">
+	</div>
+</body>
+</html>

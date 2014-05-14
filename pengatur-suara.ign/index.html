@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="asset/themes/base/jquery.ui.all.css">
+		<script type="text/javascript" src="qrc:///js/jquery.js"></script>
+		<script type="text/javascript" src="qrc:///js/ign.js"></script>
+		<script src="asset/ui/jquery.ui.core.js"></script>
+		<script src="asset/ui/jquery.ui.widget.js"></script>
+		<script src="asset/ui/jquery.ui.mouse.js"></script>
+		<script src="asset/ui/jquery.ui.slider.js"></script>
+		<script>
+		$(function() {
+			var sys = ign.sys();
+			$( "#slider-sound-volume" ).slider({
+				orientation: "horizontal",
+				range: "min",
+				min: 0,
+				max: 100,
+				value: 60,
+				slide: function( event, ui ) {
+					$( "#amount" ).val( ui.value );
+					sys.exec("amixer set 'Master' " + ui.value + "%");
+				}
+			});
+			
+			$( "#amount" ).val( $( "#slider-sound-volume" ).slider( "value" ) );
+		});
+		</script>
+	</head>
+	<body>
+		<p>
+			<label for="amount">Volume:</label>
+			<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+		</p>
+
+		<div id="slider-sound-volume" style="height:10px;"></div>
+
+		<div class="description">
+			<p>Pengatur suara ini mengakses Alsa Mixer untuk melakukan pengaturan volume suara</p>
+		</div>
+	</body>
+</html>

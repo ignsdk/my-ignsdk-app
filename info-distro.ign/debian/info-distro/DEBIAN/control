@@ -1,0 +1,10 @@
+Package: info-distro
+Version: 1.0
+Architecture: all
+Maintainer: ridwanbejo <ridwanbejo@gmail.com>
+Installed-Size: 78
+Depends: ignsdk-debian | ignsdk
+Section: unknown
+Priority: optional
+Description: Another IGN SDK Application
+ This is an IGN SDK Application

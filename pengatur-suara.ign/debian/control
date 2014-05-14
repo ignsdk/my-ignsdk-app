@@ -1,0 +1,15 @@
+Source: pengatur-suara
+Section: unknown
+Priority: optional
+Maintainer: poss-upi <poss@upi.edu>
+Build-Depends: ignsdk-debian | ignsdk, debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+#Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/pengatur-suara.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/pengatur-suara.git;a=summary
+
+Package: pengatur-suara
+Architecture: all
+Depends: ignsdk-debian | ignsdk, ${shlibs:Depends}, ${misc:Depends}
+Description: Another IGN SDK Application
+ This is an IGN SDK Application

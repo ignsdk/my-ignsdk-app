@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="asset/themes/base/jquery.ui.all.css">
+		<script type="text/javascript" src="qrc:///js/jquery.js"></script>
+		<script type="text/javascript" src="qrc:///js/ign.js"></script>
+        <script src="asset/ui/jquery.ui.core.js"></script>
+		<script src="asset/ui/jquery.ui.widget.js"></script>
+		<script src="asset/ui/jquery.ui.mouse.js"></script>
+		<script src="asset/ui/jquery.ui.slider.js"></script>
+		<script src="asset/ui/jquery.ui.datepicker.js"></script>
+		<script>
+            // menggunakan System dan Database API IGNSDK
+            var sys = ign.sys();
+            var sql = ign.sql();
+            var driver = sql.driver("sqlite", "ignsdk_todo.db");
+            
+            $(document).ready(function() {
+                show_all_task();
+               
+                $('#browse-data-button').click(function(){
+                    show_all_task();
+                });
+                
+                $('#new-task-button').click(function(){
+                    $('#form-update-task').hide();
+                    $('#display-area').hide();
+                    var form_add = 'views/form-add.html';
+                    $('#display-area').load(form_add).fadeIn('fast');
+                });
+                
+                $('#about-button').click(function(){
+                    $('#form-update-task').hide();
+                    $('#display-area').hide();
+                    var about = '<h1>Created by Nyankod ;(), copyright 2014.</h1>';
+                    $('#display-area').fadeIn('slow').html(about);
+                });
+                
+                // fungsi untuk menampilkan semua task
+                function show_all_task(){
+                    var query = sql.query("select * from task");
+                    console.log(query.status);
+                    console.log(query.content);
+                    var result ="";
+                    for (var obj in query.content){
+                        console.log(query.content[obj]);
+                        console.log(query.content[obj].name);
+                        result += query.content[obj].name + ", " + query.content[obj].priority + ", " + query.content[obj].date_reminder 
+                                    +" | <a onclick='updateTask(this);' id='delete-button-"+query.content[obj].id+"' data-id='"+query.content[obj].id+"' href='javascript:void(0)'>Edit</a>"
+                                    +" | <a onclick='deleteTask(this);' id='delete-button-"+query.content[obj].id+"' data-id='"+query.content[obj].id+"' href='javascript:void(0)'>Delete</a><br />";
+                    }
+                    $('#form-update-task').hide();
+                    $('#display-area').hide();
+                    $('#display-area').html(result).fadeIn('fast');
+                };
+                
+                // membuat slider untuk prioritas setiap task
+                $( "#priority-update-slider" ).slider({
+                    orientation: "horizontal",
+                    range: "min",
+                    min: 0,
+                    max: 3,
+                    value: 2,
+                    slide: function( event, ui ) {
+                        $( "#priority-update-rates" ).val( ui.value );
+                    }
+                });
+                $( "#priority-update-rates" ).val( $( "#priority-update-slider" ).slider( "value" ) );
+                
+                // membuat datepicker untuk menentukan date_reminder
+                $( "#date-update-reminder" ).datepicker({dateFormat: 'yy-mm-dd'});
+                
+                // proses pengubahan task dilakukan ketika form-add-task di submit
+                $("#form-update-task").submit(function(){
+                    var task_name = $('#task-update-name').val();
+                    var priority_rates = $('#priority-update-rates').val();
+                    var date_reminder = $('#date-update-reminder').val();
+                    var id = $('#id-task-hidden').val();
+                    
+                    var query = sql.query("update task set name='"+task_name+"', priority="+priority_rates+", date_reminder='"+date_reminder+"' where id="+id);
+                    console.log("query ketika submit form : "+ query.status);
+                    console.log("isi query ketika submit form : " + query.content);
+                    
+                    return false;
+                    $(this).fadeOut();
+                });
+                
+                $('#cancel-update-button').click(function(){
+                    $("#form-update-task").fadeOut();
+                });
+                
+            });
+            
+            function updateTask(task){
+                var id = $(task).attr('data-id');
+                var query = sql.query("select * from task where id="+id);
+                console.log(query.status);
+                console.log(query.content);
+                var obj;
+                for (item in query.content){
+                    console.log(query.content[item].id+" "+query.content[item].name);
+                    $('#task-update-name').val(query.content[item].name);
+                    $('#date-update-reminder').val(query.content[item].date_reminder);
+                    $('#priority-update-rates').val(query.content[item].priority);
+                    $('#priority-update-slider').slider("value", query.content[item].priority);
+                    $('#id-task-hidden').val(query.content[item].id);
+                }
+                $('#form-update-task').fadeIn("fast");
+                console.log('task yang akan diupdate adalah : ' + id);
+            }
+            
+            function deleteTask (task){
+                var id = $(task).attr('data-id');
+                
+                if (confirm('Are you sure to delete this task ?')){
+                    var query = sql.query("delete from task where id="+id);
+                    console.log(query.status);
+                    console.log(query.content);
+                }
+            }
+            
+           
+		</script>
+	</head>
+	<body>
+        <div id="menu-bar">
+            <ul style="list-style-type:none; margin:10px 20px 20px 20px ; padding:20px;">
+                <li style="display: inline;"><a id="browse-data-button" href="javascript:void(0)">Browse Data</a></li>
+                <li style="display: inline;"><a id="new-task-button" href="javascript:void(0)">New Task</a></li>
+                <li style="display: inline;"><a id="about-button" href="javascript:void(0)">About</a></li>
+            </ul>
+        </div>
+        <div style="margin-bottom:30px;">
+            <form id="form-update-task" style="display:none;">
+                <fieldset>
+                    <p>
+                        <label for="task-update-name">Task Name:</label>
+                        <input type="text" id="task-update-name" name="task-name" size="90"/>
+                    </p>
+                    <p>
+                        <label for="priority-update-rates">Priority:</label>
+                        <input type="text" id="priority-update-rates" name="priority-update-rates" style="border:0; color:#f6931f; font-weight:bold;" />
+                    </p>
+                    <div id="priority-update-slider" style="height:10px;"></div>
+                    <p>
+                        <label for="date-update-reminder">Date Reminder:</label>
+                        <input type="text" id="date-update-reminder" name="date-reminder" size="30" />
+                    </p>
+                    <p>
+                        <input type="hidden" id="id-task-hidden" value="" />
+                        <input type="submit" value="Modify It" /><input type="button" id="cancel-update-button" value="Cancel" />
+                    </p>
+                </fieldset>
+            </form>
+        
+        </div>
+        <div id="display-area">
+            
+        </div>
+	</body>
+</html>
