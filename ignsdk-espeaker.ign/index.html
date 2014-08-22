@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="qrc:///js/jquery.js"></script>
+<script type="text/javascript" src="qrc:///js/ign.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+        var sys = ign.sys();
+		$('#tombol-baca').click(function(){
+            var teks_yang_akan_dibacakan = $('#teks-bicara').val();
+            sys.exec("espeak -v"+$('#pilihan-bicara').val()+" '"+ teks_yang_akan_dibacakan +"'");
+        });
+	});
+</script>
+</head>
+<body>
+<h1>IGN E-Speak</h1>
+<i>info: saat ini hanya mendukung tiga bahasa</i>
+<form>
+    <textarea id="teks-bicara" rows="14" cols="38"></textarea> <br />
+    Pilih Bahasa: 
+    <select id="pilihan-bicara">
+        <option value="id">Indonesia</option>
+        <option value="en">Inggris</option>
+        <option value="es">Spanyol</option>
+    </select> 
+    <br/>
+    <input type="button" id="tombol-baca" value="Bacakan" />
+</form>
+</body>
+</html>
